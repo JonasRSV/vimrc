@@ -27,6 +27,7 @@ if computer == "desktop"
 
 
   set backupdir=/Users/jonasvalfridsson/.swapfiles
+  set directory=/Users/jonasvalfridsson/.swapfiles
 endif
 
 if computer == "laptop"
@@ -36,6 +37,7 @@ if computer == "laptop"
                               \'css': 'css-language-server --stdio'}
 
   set backupdir=/Users/jonval/.backups
+  set directory=/Users/jonval/.backups
 endif
 
 
@@ -113,16 +115,23 @@ map ä {
 "stty -ixon IS NEEDED FOR C-s binding put in *rc
 nnoremap <C-s> :Search 
 nnoremap <leader><C-s> :RecursiveSearch 
-nnoremap <C-n> :cn<CR>
-nnoremap <C-p> :cp<CR>
+nnoremap gs :RecursiveSearchCursorWord<CR>
 
 nnoremap <F2> :silent! Make<CR>
 
 highlight QuickFixLine term=bold,underline cterm=bold,underline gui=bold,underline
 
 
+nnoremap <expr> <C-n> &diff ? ']c' : ':cn<CR>'
+nnoremap <expr> <C-p> &diff ? '[c' : ':cp<CR>'
+nnoremap <expr> dd &diff ? ':diffget<CR>' : 'dd'
+nnoremap <expr> ds &diff ? ':diffput<CR>' : '<CR>'
+vnoremap <expr> dd &diff ? ':diffget<CR>' : 'dd'
+vnoremap <expr> ds &diff ? ':diffput<CR>' : '<CR>'
+
 
 command! Make execute "make " . expand("%") . " | cope | redraw!"
 command! -nargs=1 Search execute "vimgrep /" . <q-args> . "/j *"
 command! -nargs=1 RecursiveSearch execute "vimgrep /" . <q-args> . "/j **"
+command! RecursiveSearchCursorWord execute "vimgrep /" . expand("<cWORD>") . "/j **/*.%:e"
 
