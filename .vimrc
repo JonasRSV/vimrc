@@ -1,5 +1,3 @@
-let computer = "laptop"
-
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 " alternatively, pass a path where Vundle should install plugins
@@ -9,57 +7,30 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'scrooloose/nerdcommenter'
 
-if has('nvim')
-  Plugin 'roxma/nvim-completion-manager'
-  Plugin 'autozimu/LanguageClient-neovim'
-else
-  Plugin 'natebosch/vim-lsc'
-endif
+Plugin 'autozimu/LanguageClient-neovim'
+Plugin 'Shougo/deoplete.nvim'
+Plugin 'tweekmonster/deoplete-clang2'
 
+
+" Giggles
+Plugin 'fszymanski/deoplete-emoji'
 call vundle#end()            " required
 
-if has('nvim')
-  let g:LanguageClient_serverCommands = {
-    \ 'haskell': ['hie', '--lsp'],
-    \ 'python': ['pyls']
-    \}
+let g:LanguageClient_serverCommands = {
+  \ 'haskell': ['hie', '--lsp'],
+  \ 'python': ['pyls'],
+  \ "javascript": ['node', '/Users/jonval/WARNING/LSPS/javascript-typescript-langserver/lib/language-server-stdio.js'],
+\}
 
-  nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
-  nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+let g:deoplete#enable_at_startup = 1
 
-else
-  let g:lsc_auto_map = {
-      \ 'GoToDefinition': 'gd',
-      \ 'FindReferences': 'gr',
-      \ 'ShowHover': 'K',
-      \ 'Completion': 'completefunc'
-      \}
-
-  if computer == "desktop"
-    let g:lsc_server_commands = {'haskell': 'hie --lsp',
-                                \'python': 'pyls',
-                                \'javascript': 'node  /Users/jonasvalfridsson/me/singularity/gadgets/javascript-typescript-langserver/lib/language-server-stdio.js',
-                                \'css': 'css-language-server --stdio'}
+nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
+nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
 
 
-  endif
+set backupdir=/Users/jonval/.backups
+set directory=/Users/jonval/.backups
 
-  if computer == "laptop"
-    let g:lsc_server_commands = {'haskell': 'hie --lsp',
-                                \'python': 'pyls',
-                                \'javascript': 'node  /Users/jonval/WARNING/LSPS/javascript-typescript-langserver/lib/language-server-stdio.js',
-                                \'css': 'css-language-server --stdio'}
-  endif
-endif
-
-
-if computer == "desktop"
-    set backupdir=/Users/jonasvalfridsson/.swapfiles
-    set directory=/Users/jonasvalfridsson/.swapfiles
-else
-    set backupdir=/Users/jonval/.backups
-    set directory=/Users/jonval/.backups
-endif
 let g:vim_rerun_favorites = [
   \"silent make % | cope | redraw!",
   \"e output | diffsplit eoutput | map <buffer><tab> ]c |map <buffer><leader><tab> [c" 
@@ -85,6 +56,9 @@ set mouse=a "enable mouse"
 
 "Switching Buffers without saving
 set hidden
+
+"For Regexes
+set magic
 
 "Fix Searching
 set hlsearch "Highligh search hits"
@@ -130,6 +104,14 @@ else
   map <leader><C-@> :vertical sbp<CR>`"zz
 endif
 
+inoremap (<CR> ()<Esc>i
+inoremap {<CR> {<CR>}<Esc>O
+inoremap {; {<CR>};<Esc>O
+inoremap {, {<CR>},<Esc>O
+inoremap [<CR> []<Esc>i
+inoremap [; [];<Esc>i<Esc>i
+inoremap [, [],<Esc>i<Esc>i
+
 map <space> <leader>
 imap <tab> <C-n>
 map <C-b> :b 
@@ -140,6 +122,7 @@ map s /
 map ö }
 map ä {
 map Y 0y$
+map R :%s//
 
 "stty -ixon IS NEEDED FOR C-s binding put in *rc
 nnoremap <C-s> :Search 
@@ -181,3 +164,4 @@ endfunction
 
   
 
+au FileType netrw setl bufhidden=delete
