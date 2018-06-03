@@ -11,6 +11,7 @@ Plugin 'autozimu/LanguageClient-neovim'
 Plugin 'Shougo/deoplete.nvim'
 Plugin 'tweekmonster/deoplete-clang2'
 
+Plugin 'jalvesaq/vimcmdline'
 
 " Giggles
 Plugin 'fszymanski/deoplete-emoji'
@@ -31,22 +32,24 @@ nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
 set backupdir=/Users/jonval/.backups
 set directory=/Users/jonval/.backups
 
-let g:vim_rerun_favorites = [
-  \"silent make % | cope | redraw!",
-  \"e output | diffsplit eoutput | map <buffer><tab> ]c |map <buffer><leader><tab> [c" 
-  \]
-
 
 let g:disable_vim_auto_close_plugin = 1
 "Global sets
 set laststatus=1
 set statusline=%f\ %y
 
+let g:deoplete#enable_at_startup = 1
 
 let g:netrw_altv=1
 let g:netrw_preview   = 1
 let g:netrw_liststyle = 3
 let g:netrw_winsize   = 75
+
+let cmdline_follow_colorscheme = 1
+let cmdline_vsplit      = 1      " Split the window vertically
+let cmdline_map_start          = '<C-i>'
+let cmdline_map_send_and_stay  = '<C-s>'
+let cmdline_map_send           = '<C-s>'
 
 set encoding=utf-8
 set clipboard+=unnamed,unnamedplus
@@ -125,8 +128,6 @@ map Y 0y$
 map R :%s//
 
 "stty -ixon IS NEEDED FOR C-s binding put in *rc
-nnoremap <C-s> :Search 
-nnoremap <leader><C-s> :RecursiveSearch 
 nnoremap gs :RecursiveSearchCursorWord<CR>
 
 nnoremap <F2> :silent! Make<CR>
@@ -142,10 +143,12 @@ vnoremap <expr> dd &diff ? ':diffget<CR>' : 'dd'
 vnoremap <expr> ds &diff ? ':diffput<CR>' : '<CR>'
 
 
-command! Make execute "make " . expand("%") . " | cope | redraw!"
+command! Make execute "make " . expand("%") . " | redraw!"
 command! -nargs=1 Search execute "vimgrep /" . <q-args> . "/j *"
 command! -nargs=1 RecursiveSearch execute "vimgrep /" . <q-args> . "/j **"
 command! RecursiveSearchCursorWord call Searches("vimgrep /" . expand("<cword>") . "/j **/*.%:e", expand("<cword>")) 
+
+command! Vterm execute "vsplit |term"
 
 let g:pat = "Hell"
 
