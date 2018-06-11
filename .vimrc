@@ -14,6 +14,7 @@ Plugin 'tweekmonster/deoplete-clang2'
 Plugin 'jalvesaq/vimcmdline'
 
 " Giggles
+Plugin 'junegunn/fzf'
 Plugin 'fszymanski/deoplete-emoji'
 call vundle#end()            " required
 
@@ -141,12 +142,14 @@ nnoremap <expr> dd &diff ? ':diffget<CR>' : 'dd'
 nnoremap <expr> ds &diff ? ':diffput<CR>' : '<CR>'
 vnoremap <expr> dd &diff ? ':diffget<CR>' : 'dd'
 vnoremap <expr> ds &diff ? ':diffput<CR>' : '<CR>'
+nnoremap <C-f> :FZF<CR>
 
 
 command! Make execute "make " . expand("%") . " | redraw!"
 command! -nargs=1 Search execute "vimgrep /" . <q-args> . "/j *"
 command! -nargs=1 RecursiveSearch execute "vimgrep /" . <q-args> . "/j **"
 command! RecursiveSearchCursorWord call Searches("vimgrep /" . expand("<cword>") . "/j **/*.%:e", expand("<cword>")) 
+
 
 command! Vterm execute "vsplit |term"
 
